@@ -5,6 +5,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        autofocus
         v-model="field0"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -91,29 +92,29 @@ export default {
     this.onResize()
   },
   watch: {
-    field0(newValue, oldValue) {
-      this.checkTopFieldEntry(0, newValue, oldValue)
+    field0() {
+      this.checkTopFieldEntry()
     },
-    field1(newValue, oldValue) {
-      this.checkTopFieldEntry(1, newValue, oldValue)
+    field1() {
+      this.checkTopFieldEntry()
     },
-    field2(newValue, oldValue) {
-      this.checkTopFieldEntry(2, newValue, oldValue)
+    field2() {
+      this.checkTopFieldEntry()
     },
-    field3(newValue, oldValue) {
-      this.checkTopFieldEntry(3, newValue, oldValue)
+    field3() {
+      this.checkTopFieldEntry()
     },
-    field4(newValue, oldValue) {
-      this.checkBottomFieldEntry(4, newValue, oldValue)
+    field4() {
+      this.checkBottomFieldEntry()
     },
-    field5(newValue, oldValue) {
-      this.checkBottomFieldEntry(5, newValue, oldValue)
+    field5() {
+      this.checkBottomFieldEntry()
     },
-    field6(newValue, oldValue) {
-      this.checkBottomFieldEntry(6, newValue, oldValue)
+    field6() {
+      this.checkBottomFieldEntry()
     },
-    field7(newValue, oldValue) {
-      this.checkBottomFieldEntry(7, newValue, oldValue)
+    field7() {
+      this.checkBottomFieldEntry()
     },
     eliteYear() {
       this.field4 = this.eliteYear.toString().slice(0, 1)
@@ -138,32 +139,34 @@ export default {
         fontSize = this.width * 1.3
       }
 
-      this.$refs.top.children.forEach((child) => {
+      this.$refs.top.children.forEach((child, index) => {
         child.children[0].children[0].style = `width: ${this.width}px !important`
         child.children[0].children[0].children[1].children[0].style = `font-size: ${fontSize}px !important`
+        child.children[0].children[0].children[1].children[0].maxLength = 1
+        child.children[0].children[0].children[1].children[0].addEventListener('keypress', (event) => {
+          if (!isNaN(event.key)) {
+            this[`field${index}`] = event.key
+          }
+        })
       })
 
-      this.$refs.bottom.children.forEach((child) => {
+      this.$refs.bottom.children.forEach((child, index) => {
         child.children[0].children[0].style = `width: ${this.width}px !important`
         child.children[0].children[0].children[1].children[0].style = `font-size: ${fontSize}px !important`
+        child.children[0].children[0].children[1].children[0].maxLength = 1
+        child.children[0].children[0].children[1].children[0].addEventListener('keypress', (event) => {
+          if (!isNaN(event.key)) {
+            this[`field${index + 4}`] = event.key
+          }
+        })
       })
     },
-    checkTopFieldEntry(fieldIndex, newValue, oldValue) {
-      if (newValue.length === 2 && newValue.includes(oldValue)) {
-        this[`field${fieldIndex}`] = newValue.replace(oldValue, '')
-      } else {
-        this[`field${fieldIndex}`] = newValue.substr(newValue.length - 1, 1)
-      }
+    checkTopFieldEntry() {
       if (this.field0 && this.field1 && this.field2 && this.field3) {
         this.eliteYear = parseInt(this.field0 + this.field1 + this.field2 + this.field3) + 1286
       }
     },
-    checkBottomFieldEntry(fieldIndex, newValue, oldValue) {
-      if (newValue.length === 2 && newValue.includes(oldValue)) {
-        this[`field${fieldIndex}`] = newValue.replace(oldValue, '')
-      } else {
-        this[`field${fieldIndex}`] = newValue.substr(newValue.length - 1, 1)
-      }
+    checkBottomFieldEntry() {
       if (this.field4 && this.field5 && this.field6 && this.field7) {
         this.localYear = parseInt(this.field4 + this.field5 + this.field6 + this.field7) - 1286
       }

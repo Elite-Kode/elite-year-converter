@@ -1,11 +1,12 @@
 <template>
-  <div class="d-flex flex-column" style="height: 100%" v-resize="onResize">
+  <div class="d-flex flex-column" style="height: 100%" v-resize="onResize" ref="container">
     <div class="flex-grow-1 primary d-flex justify-center" ref="top">
       <v-text-field
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
         autofocus
+        @focus="focusField = 0"
         v-model="field0"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -13,6 +14,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 1"
         v-model="field1"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -20,6 +22,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 2"
         v-model="field2"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -27,6 +30,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 3"
         v-model="field3"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -36,6 +40,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 4"
         v-model="field4"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -43,6 +48,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 5"
         v-model="field5"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -50,6 +56,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 6"
         v-model="field6"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -57,6 +64,7 @@
         class="align-center flex-grow-0 mx-2"
         color="white"
         outlined
+        @focus="focusField = 7"
         v-model="field7"
         :style="{ width: width + 'px' }"
       ></v-text-field>
@@ -72,6 +80,7 @@ export default {
       width: 0,
       eliteYear: 0,
       localYear: 0,
+      focusField: 0,
       field0: '',
       field1: '',
       field2: '',
@@ -90,6 +99,7 @@ export default {
   },
   mounted() {
     this.onResize()
+    window.addEventListener('keydown', this.arrowKeys)
   },
   watch: {
     field0() {
@@ -169,6 +179,37 @@ export default {
     checkBottomFieldEntry() {
       if (this.field4 && this.field5 && this.field6 && this.field7) {
         this.localYear = parseInt(this.field4 + this.field5 + this.field6 + this.field7) - 1286
+      }
+    },
+    arrowKeys(event) {
+      let newFocus
+      if (event.keyCode === 37) {
+        newFocus = this.focusField - 1
+        if (newFocus < 0) {
+          newFocus = 7
+        }
+      } else if (event.keyCode === 39) {
+        newFocus = this.focusField + 1
+        if (newFocus > 7) {
+          newFocus = 0
+        }
+      } else if (event.keyCode === 38) {
+        newFocus = this.focusField - 4
+        if (newFocus < 0) {
+          newFocus += 8
+        }
+      } else if (event.keyCode === 40) {
+        newFocus = this.focusField + 4
+        if (newFocus > 7) {
+          newFocus -= 8
+        }
+      }
+      if (event.keyCode === 37 || event.keyCode === 38 || event.keyCode === 39 || event.keyCode === 40) {
+        if (newFocus < 4) {
+          this.$refs.top.children[newFocus].children[0].children[0].children[1].children[0].focus()
+        } else {
+          this.$refs.bottom.children[newFocus - 4].children[0].children[0].children[1].children[0].focus()
+        }
       }
     }
   }

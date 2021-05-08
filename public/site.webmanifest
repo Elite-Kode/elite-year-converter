@@ -1,6 +1,7 @@
 {
     "name": "Elite Year Converter",
     "short_name": "Elite Year Converter",
+    "start_url": "https://eyc.kodeblox.com",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

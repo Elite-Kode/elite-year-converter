@@ -30,7 +30,7 @@
         :style="{ width: width + 'px' }"
       ></v-text-field>
     </div>
-    <div class="flex-grow-1 secondary d-flex justify-center" ref="bottom">
+    <div class="flex-grow-1 accent d-flex justify-center" ref="bottom">
       <v-text-field
         class="align-center flex-grow-0 mx-2"
         color="white"
